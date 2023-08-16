@@ -1,17 +1,24 @@
 
 <html>
   <head><style>
-        model-viewer { 
-            margin: 40px 0; 
-            display: block; 
+    model-viewer { 
+        margin: 40px 0; 
+        display: block; 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    model-viewer:first-of-type { 
+        margin-top: 0; 
+    }
+    model-viewer:last-of-type { 
+        margin-bottom: 0; 
+    }
+    @media (max-width: 768px) {
+        #card {
+            padding-left: 80px; 
+            padding-right: 80px; 
         }
-        model-viewer:first-of-type { 
-            margin-top: 0; 
-        }
-        model-viewer:last-of-type { 
-            margin-bottom: 0; 
-        }
-    </style>
+    }
+</style>
     <title>Web AR</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -73,16 +80,7 @@
   <body>
     <div id="card">
       <div id="models-container"></div>
-      <section class="attribution">
-        <span>
-          <h1>Web AR Viewer</h1>
-          <span>To view the source code, <a href="https://github.com/lightlessdays/web-ar" target="_blank">click here.</a></span>
-        </span>
-        <a class="cc" href="https://github.com/lightlessdays/web-ar/blob/main/LICENSE.md" target="_blank">
-          <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg">
-          <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg">
-        </a>
-      </section>
+      
     </div>
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
   </body>
