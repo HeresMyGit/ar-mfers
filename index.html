@@ -66,6 +66,8 @@
                         modelViewer.setAttribute("camera-controls", "");
                         modelViewer.setAttribute("auto-rotate", "");
                         modelViewer.setAttribute("ar", "");
+                        modelViewer.setAttribute("autoplay", "");
+                        modelViewer.setAttribute("loop", "");
                         container.appendChild(modelViewer);
                     }
                 }
@@ -79,6 +81,41 @@
   </head>
   <body>
     <div id="card">
+<div style="text-align:center; margin-bottom: 20px;">
+    <label for="mferID">Enter mfer ID: </label>
+    <input type="text" id="mferID" placeholder="1234">
+    <button onclick="filterModels()">Search</button>
+    <button onclick="resetFilter()">Cancel</button>
+</div>
+
+<script>
+    function filterModels() {
+        const inputID = document.getElementById("mferID").value;
+        const modelViewers = document.querySelectorAll("model-viewer");
+        
+        // Reset visibility for all models before applying new filter
+        modelViewers.forEach(mv => {
+            mv.style.display = "block";
+        });
+
+        // Apply the filter based on entered ID
+        modelViewers.forEach(mv => {
+            const src = mv.getAttribute("src");
+            if (src && !src.includes(inputID)) {
+                mv.style.display = "none";
+            }
+        });
+    }
+
+    function resetFilter() {
+        document.getElementById("mferID").value = "";
+        const modelViewers = document.querySelectorAll("model-viewer");
+        modelViewers.forEach(mv => {
+            mv.style.display = "block";
+        });
+    }
+</script>
+
       <div id="models-container"></div>
       
     </div>
