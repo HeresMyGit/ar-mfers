@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Details</title>
+    <link href="demo-styles.css" rel="stylesheet"/>
+    <script defer src="https://github.com/lightlessdays/web-ar/blob/main/focus.js"></script>
+    <script src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js" type="module"></script>
+    <style>
+        model-viewer {
+            width: 100%;
+            max-width: 600px;  /* Adjust to visually appealing width */
+            margin: 40px auto;  /* Center the model-viewer */
+            display: block;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        model-viewer:first-of-type {
+            margin-top: 0;
+        }
+        model-viewer:last-of-type {
+            margin-bottom: 0;
+        }
+        @media (max-width: 768px) {
+            #card {
+                padding-left: 80px;
+                padding-right: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="card">
+    <div id="models-container"></div>
+</div>
+
+<script type="module">
+    const color_map = {
+        "red": "ff7277",
+        "green": "b7ff6c",
+        "yellow": "5cd3ff",
+        "orange": "feb66e",
+        "blue": "5cd3ff",
+        "tree": "ffe25f",
+        "space": "898989",
+        "graveyard": "7c7c7c"
+    };
+
+    async function fetchModelDetails() {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('id');
+
+        // Fetch metadata for the specific model
+        const response = await fetch(`https://cybermfers.sfo3.digitaloceanspaces.com/cybermfers/public/assets/${id}.json`);
+        const metadata = await response.json();
+
+        let bgColor = "FFFFFF";
+        const backgroundTrait = metadata.attributes.find(attr => attr.trait_type === "background");
+        if (backgroundTrait) {
+            bgColor = color_map[backgroundTrait.value] || "FFFFFF";
+        }
+
+        // Fetch and display the model
+        const container = document.getElementById("models-container");
+        const modelViewer = document.createElement("model-viewer");
+        modelViewer.style.backgroundColor = `#${bgColor}`;
+        modelViewer.setAttribute("src", `https://cybermfers.sfo3.digitaloceanspaces.com/cybermfers/public/assets/${id}.glb`);
+        modelViewer.setAttribute("ios-src", `https://cybermfers.sfo3.digitaloceanspaces.com/cybermfers/public/assets/${id}.usdz`);
+        modelViewer.setAttribute("alt", `mfer #${id}`);
+        modelViewer.setAttribute("ar-status", "not-presenting");
+        modelViewer.setAttribute("shadow-intensity", "1");
+        modelViewer.setAttribute("camera-controls", "");
+        modelViewer.setAttribute("auto-rotate", "");
+        modelViewer.setAttribute("ar", "");
+        modelViewer.setAttribute("autoplay", "");
+        modelViewer.setAttribute("loop", "");
+
+        container.appendChild(modelViewer);
+    }
+
+    window.onload = fetchModelDetails;
+</script>
+
+</body>
+</html>
