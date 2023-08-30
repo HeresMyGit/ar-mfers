@@ -55,7 +55,7 @@
     };
 
     async function fetchModels() {
-        const response = await fetch("https://cybermfers.sfo3.digitaloceanspaces.com/?prefix=cybermfers/public/assets/");
+        const response = await fetch("https://cybermfers.sfo3.digitaloceanspaces.com/?prefix=cybermfers/public/metadata/");
         const xmlText = await response.text();
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xmlText, "text/xml");
@@ -67,55 +67,46 @@
             const basename = key.split('.')[0];
             const ext = key.split('.')[1];
 
-            if (!modelPairs[basename]) {
-                modelPairs[basename] = {};
-            }
-
-            if (ext === 'usdz') {
-                modelPairs[basename]['usdz'] = key;
-            } else if (ext === 'glb') {
-                modelPairs[basename]['glb'] = key;
-            }
-        }
-
-        const container = document.getElementById("models-container");
-        for (const basename in modelPairs) {
-            const usdz = modelPairs[basename]['usdz'];
-            const glb = modelPairs[basename]['glb'];
-            const id = basename.split('/').pop();
-
-            if (usdz && glb) {
-                const modelViewer = document.createElement("model-viewer");
-                modelViewer.setAttribute("src", `https://cybermfers.sfo3.digitaloceanspaces.com/${glb}`);
-                modelViewer.setAttribute("ios-src", `https://cybermfers.sfo3.digitaloceanspaces.com/${usdz}`);
-                modelViewer.setAttribute("alt", `${basename}`);
-                modelViewer.setAttribute("ar-status", "not-presenting");
-                modelViewer.setAttribute("shadow-intensity", "1");
-                modelViewer.setAttribute("camera-controls", "");
-                modelViewer.setAttribute("auto-rotate", "");
-                modelViewer.setAttribute("ar", "");
-                modelViewer.setAttribute("autoplay", "");
-                modelViewer.setAttribute("loop", "");
-
-                const metadataUrl = `https://cybermfers.sfo3.digitaloceanspaces.com/cybermfers/public/assets/${id}.json`;
+            if (ext === 'json') {
+                const metadataUrl = `https://cybermfers.sfo3.digitaloceanspaces.com/${key}`;
                 const metadataResponse = await fetch(metadataUrl);
                 const metadata = await metadataResponse.json();
 
-                let bgColor = "FFFFFF";
-                const backgroundTrait = metadata.attributes.find(attr => attr.trait_type === "background");
+                const glb = metadata.animation_url;
+                const usdz = metadata.usdz_url;
+                const id = basename.split('/').pop();
 
-                if (backgroundTrait) {
-                    bgColor = color_map[backgroundTrait.value] || "FFFFFF";
+                const container = document.getElementById("models-container");
+
+                if (usdz && glb) {
+                    const modelViewer = document.createElement("model-viewer");
+                    modelViewer.setAttribute("src", glb);
+                    modelViewer.setAttribute("ios-src", usdz);
+                    modelViewer.setAttribute("alt", `${basename}`);
+                    modelViewer.setAttribute("ar-status", "not-presenting");
+                    modelViewer.setAttribute("shadow-intensity", "1");
+                    modelViewer.setAttribute("camera-controls", "");
+                    modelViewer.setAttribute("auto-rotate", "");
+                    modelViewer.setAttribute("ar", "");
+                    modelViewer.setAttribute("autoplay", "");
+                    modelViewer.setAttribute("loop", "");
+
+                    let bgColor = "FFFFFF";
+                    const backgroundTrait = metadata.attributes.find(attr => attr.trait_type === "background");
+
+                    if (backgroundTrait) {
+                        bgColor = color_map[backgroundTrait.value] || "FFFFFF";
+                    }
+                    metadata.background_color = bgColor;
+
+                    modelViewer.style.backgroundColor = `#${bgColor}`;
+                    container.appendChild(modelViewer);
+
+                    const detailLink = document.createElement("a");
+                    detailLink.setAttribute("href", `details.html?id=${id}`);
+                    detailLink.textContent = `view all mfer #${id}`;
+                    container.appendChild(detailLink);
                 }
-                metadata.background_color = bgColor;
-
-                modelViewer.style.backgroundColor = `#${bgColor}`;
-                container.appendChild(modelViewer);
-
-                const detailLink = document.createElement("a");
-                detailLink.setAttribute("href", `details.html?id=${id}`);
-                detailLink.textContent = `view all mfer #${id}`;
-                container.appendChild(detailLink);
             }
         }
     }
