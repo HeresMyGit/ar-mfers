@@ -102,14 +102,14 @@
 
             container.appendChild(modelViewer);
 
-            document.getElementById("png-btn").addEventListener("click", () => downloadFile(metadata.image));
-            document.getElementById("vrm-btn").addEventListener("click", () => downloadFile(metadata.vrm_url));
-            document.getElementById("fbx-btn").addEventListener("click", () => downloadFile(metadata.fbx_url));
-            document.getElementById("usdz-btn").addEventListener("click", () => downloadFile(metadata.usdz_url));
-            document.getElementById("glb-btn").addEventListener("click", () => downloadFile(metadata.animation_url));
+            document.getElementById("png-btn").addEventListener("click", () => downloadFile(metadata.image, "PNG"));
+            document.getElementById("vrm-btn").addEventListener("click", () => downloadFile(metadata.vrm_url, "VRM"));
+            document.getElementById("fbx-btn").addEventListener("click", () => downloadFile(metadata.fbx_url, "FBX"));
+            document.getElementById("usdz-btn").addEventListener("click", () => downloadFile(metadata.usdz_url, "USDZ"));
+            document.getElementById("glb-btn").addEventListener("click", () => downloadFile(metadata.animation_url, "GLB"));
         }
 
-        function downloadFile(url) {
+        function downloadFile(url, type) {
             if (url) {
                 const link = document.createElement('a');
                 link.href = url;
@@ -117,6 +117,13 @@
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
+
+                const params = new URLSearchParams(window.location.search);
+                const id = params.get('id');
+                gtag('event', 'download', {
+                    'event_category': 'button_click',
+                    'event_label': 'Download ' + type + ' Button - ID: ' + id
+                });
             }
         }
 
