@@ -1,57 +1,32 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DEMRCQSGLC"></script>
-    <script>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-DEMRCQSGLC"></script>
+<script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
       gtag('config', 'G-DEMRCQSGLC');
     </script>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web AR</title>
-    <link href="demo-styles.css" rel="stylesheet"/>
-    <script defer src="https://github.com/lightlessdays/web-ar/blob/main/focus.js"></script>
-    <script src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js" type="module"></script>
-    <style>
-        model-viewer {
-            width: 100%;
-            max-width: 600px;  /* Adjust to visually appealing width */
-            margin: 40px auto;  /* Center the model-viewer */
-            display: block;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        model-viewer:first-of-type {
-            margin-top: 0;
-        }
-        model-viewer:last-of-type {
-            margin-bottom: 0;
-        }
-        @media (max-width: 768px) {
-            #card {
-                padding-left: 80px;
-                padding-right: 80px;
-            }
-        }
-    </style>
-</head>
-<body>
-
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>mfer avatars</title>
+<link href="demo-styles.css" rel="stylesheet"/>
+<script defer="" src="https://github.com/lightlessdays/web-ar/blob/main/focus.js"></script>
+<script src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js" type="module"></script>
+<link href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAK0lEQVQ4jWNgGAWjYBSMglEwCkbBSAcACBAAAeaR9MDwTVgZ4Q9II7CfSAb8DBhGwQgABJ5A8V7i4hkAAAAASUVORK5CYII=" rel="icon" type="image/png"/></head>
+<body><h1 style="text-align:center; margin: 20px 0;">mfer avatars</h1><div style="text-align:center; margin: 20px 0;"><a href="https://www.mferavatars.xyz" style="padding: 10px 20px; background-color: #007BFF; color: #fff; border-radius: 5px; text-decoration: none; font-weight: bold;">Mint Here</a></div>
 <div id="card">
-    <div style="text-align:center; margin-bottom: 20px;">
-        <label for="mferID">Enter mfer ID: </label>
-        <input id="mferID" placeholder="1234" type="text"/>
-        <button onclick="filterModels()">Search</button>
-        <button onclick="resetFilter()">Cancel</button>
-    </div>
-
-    <div id="models-container"></div>
+<div style="text-align:center; margin-bottom: 20px;">
+<label for="mferID">Enter mfer ID: </label>
+<input id="mferID" placeholder="1234" type="text"/>
+<button onclick="onSearchPressed()" style="">Search</button>
 </div>
-
+<div id="models-container"></div>
+</div>
 <script type="module">
     const color_map = {
         "red": "ff7277",
@@ -70,7 +45,7 @@
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xmlText, "text/xml");
         const keys = xmlDoc.getElementsByTagName("Key");
-        const modelPairs = {};
+        const mintedMfers = {};
 
         for (let i = 0; i < keys.length; i++) {
             const key = keys[i].textContent;
@@ -112,10 +87,10 @@
                     modelViewer.style.backgroundColor = `#${bgColor}`;
                     container.appendChild(modelViewer);
 
-                    const detailLink = document.createElement("a");
-                    detailLink.setAttribute("href", `details.html?id=${id}`);
-                    detailLink.textContent = `view all mfer #${id}`;
-                    container.appendChild(detailLink);
+                    const detailButton = document.createElement("button");
+                    detailButton.onclick = function() { window.location.href = `details.html?id=${id}`; };
+                    detailButton.textContent = `view all mfer #${id}`; detailButton.style.width = "calc(100% - 20px)"; detailButton.style.marginTop = "10px"; detailButton.style.padding = "10px"; detailButton.style.backgroundColor = "#007BFF"; detailButton.style.color = "#fff"; detailButton.style.border = "1px solid #ccc"; detailButton.style.cursor = "pointer"; detailButton.style.borderRadius = "5px"; detailButton.style.display = "block"; detailButton.style.marginLeft = "auto"; detailButton.style.marginRight = "auto";
+                    container.appendChild(detailButton);
                 }
             }
         }
@@ -124,51 +99,35 @@
     window.onload = fetchModels;
 
 </script>
-
 <script>
-    function filterModels() {
-        const inputID = document.getElementById("mferID").value;
-        const modelViewers = document.querySelectorAll("model-viewer");
-        const detailLinks = document.querySelectorAll("a");
+    function onSearchPressed() {
+        const id = document.getElementById("mferID").value;
         
-        // Reset visibility for all models before applying new filter
-        modelViewers.forEach(mv => {
-            mv.style.display = "block";
-        });
+        fetch('https://cybermfers.sfo3.digitaloceanspaces.com/?prefix=cybermfers/public/metadata/')
+            .then(response => response.text())
+            .then(data => {
+                const parser = new DOMParser();
+                const xml = parser.parseFromString(data, 'application/xml');
+                const files = xml.querySelectorAll('Key');
+                let fileFound = false;
 
-        detailLinks.forEach(link => {
-            link.style.display = "block";
-        });
+                files.forEach(file => {
+                    if (file.textContent === `cybermfers/public/metadata/${id}.json`) {
+                        fileFound = true;
+                    }
+                });
 
-        // Apply the filter based on entered ID
-        modelViewers.forEach(mv => {
-            const src = mv.getAttribute("src");
-            if (src && !src.includes(inputID)) {
-                mv.style.display = "none";
-            }
-        });
-
-        detailLinks.forEach(link => {
-            const href = link.getAttribute("href");
-            if (href && !href.includes(inputID)) {
-                link.style.display = "none";
-            }
-        });
-    }
-
-    function resetFilter() {
-        document.getElementById("mferID").value = "";
-        const modelViewers = document.querySelectorAll("model-viewer");
-        const detailLinks = document.querySelectorAll("a");
-        modelViewers.forEach(mv => {
-            mv.style.display = "block";
-        });
-
-        detailLinks.forEach(link => {
-            link.style.display = "block";
-        });
+                if (fileFound) {
+                    window.location.href = `details.html?id=${id}`;
+                } else {
+                    let modalResponse = confirm('That avatar is not minted. Do you want to mint it?');
+                    if (modalResponse) {
+                        window.location.href = 'https://www.mferavatars.xyz';
+                    }
+                }
+            })
+            .catch(error => console.error('Error:', error));
     }
 </script>
-
 </body>
 </html>

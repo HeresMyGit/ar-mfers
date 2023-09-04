@@ -1,24 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
 
-    <head>
-        <!-- Google tag (gtag.js) -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-DEMRCQSGLC"></script>
-        <script>
+<html lang="en">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-DEMRCQSGLC"></script>
+<script>
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
           gtag('js', new Date());
 
           gtag('config', 'G-DEMRCQSGLC');
         </script>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title></title>
+<link href="demo-styles.css" rel="stylesheet"/>
+<script defer="" src="https://github.com/lightlessdays/web-ar/blob/main/focus.js"></script>
+<script src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js" type="module"></script>
 
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Model Details</title>
-        <link href="demo-styles.css" rel="stylesheet" />
-        <script defer src="https://github.com/lightlessdays/web-ar/blob/main/focus.js"></script>
-        <script src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js" type="module"></script>
-        <style>
+<script>
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const mferId = urlParams.get('id');
+        if (mferId) {
+            document.title = 'mfer #' + mferId;
+            const headerElement = document.getElementById('dynamicHeader');
+            if (headerElement) {
+                headerElement.textContent = 'mfer #' + mferId;
+            }
+        }
+    };
+</script>
+<style>
             model-viewer {
                 width: 100%;
                 max-width: 600px;  
@@ -44,22 +57,20 @@
                 }
             }
         </style>
-    </head>
-
-    <body>
-
-    <div id="card">
-        <div id="models-container"></div>
-        <div id="download-buttons">
-            <button id="png-btn">PNG</button>
-            <button id="vrm-btn">VRM</button>
-            <button id="fbx-btn">FBX</button>
-            <button id="usdz-btn">USDZ</button>
-            <button id="glb-btn">GLB</button>
-        </div>
-    </div>
-
-    <script type="module">
+<link href="#" rel="icon" type="image/png"/></head>
+<body>
+<h1 id="dynamicHeader" style="text-align:center; margin: 20px 0;"></h1><h1 style="text-align:center; margin: 20px 0;"></h1>
+<div id="card">
+<div id="models-container"></div>
+<div id="download-buttons">
+<button id="png-btn">PNG</button>
+<button id="vrm-btn">VRM</button>
+<button id="fbx-btn">FBX</button>
+<button id="usdz-btn">USDZ</button>
+<button id="glb-btn">GLB</button>
+</div>
+</div>
+<script type="module">
         const color_map = {
             "red": "ff7277",
             "green": "b7ff6c",
@@ -129,7 +140,5 @@
 
         window.onload = fetchModelDetails;
     </script>
-
-</body>
-
+<div class="metadata"></div></body>
 </html>
