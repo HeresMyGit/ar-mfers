@@ -17,7 +17,6 @@
 <link href="demo-styles.css" rel="stylesheet"/>
 <script defer="" src="https://github.com/lightlessdays/web-ar/blob/main/focus.js"></script>
 <script src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js" type="module"></script>
-
 <script>
     window.onload = function() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -57,7 +56,29 @@
                 }
             }
         </style>
-<link href="#" rel="icon" type="image/png"/></head>
+<link href="#" rel="icon" type="image/png"/><script>
+document.addEventListener('DOMContentLoaded', (event) => {
+  const urlParams = new URLSearchParams(window.location.search);
+    console.log("URL Parameters: ", urlParams.toString());
+
+    const mferId = urlParams.get('id');
+    console.log("mferId: ", mferId);
+
+    if (mferId) {
+        document.title = 'mfer #' + mferId;
+        console.log("Document title set to: ", document.title);
+        
+        const headerElement = document.getElementById('dynamicHeader');
+        console.log("Header Element: ", headerElement);
+        
+        if (headerElement) {
+            headerElement.textContent = 'mfer #' + mferId;
+            console.log("Header element text content set to: ", headerElement.textContent);
+        }
+    }
+
+});
+</script></head>
 <body>
 <h1 id="dynamicHeader" style="text-align:center; margin: 20px 0;"></h1><h1 style="text-align:center; margin: 20px 0;"></h1>
 <div id="card">
