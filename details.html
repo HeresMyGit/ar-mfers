@@ -59,25 +59,66 @@
 <link href="#" rel="icon" type="image/png"/><script>
 document.addEventListener('DOMContentLoaded', (event) => {
   const urlParams = new URLSearchParams(window.location.search);
-    console.log("URL Parameters: ", urlParams.toString());
+  const id = urlParams.get('id');
+  
+  if(id) {
+    const faviconLink = document.createElement('link');
+    faviconLink.rel = 'icon';
+    faviconLink.href = `https://cybermfers.sfo3.digitaloceanspaces.com/cybermfers/public/assets/png/${id}.png`;
+    faviconLink.type = 'image/png';
+    
+    document.head.appendChild(faviconLink);
+  }
+});
+</script><script>
+if (mferId) {
+    document.title = 'mfer #' + mferId;
 
-    const mferId = urlParams.get('id');
-    console.log("mferId: ", mferId);
-
-    if (mferId) {
-        document.title = 'mfer #' + mferId;
-        console.log("Document title set to: ", document.title);
-        
-        const headerElement = document.getElementById('dynamicHeader');
-        console.log("Header Element: ", headerElement);
-        
-        if (headerElement) {
-            headerElement.textContent = 'mfer #' + mferId;
-            console.log("Header element text content set to: ", headerElement.textContent);
-        }
+    const headerElement = document.getElementById('dynamicHeader');
+    if (headerElement) {
+        headerElement.textContent = 'mfer #' + mferId;
     }
 
-});
+    const iconUrl = \`https://cybermfers.sfo3.digitaloceanspaces.com/cybermfers/public/assets/png/\${mferId}.png\`;
+
+    // For iOS
+    const appleTouchIconLink = document.createElement('link');
+    appleTouchIconLink.rel = 'apple-touch-icon';
+    appleTouchIconLink.href = iconUrl;
+    document.head.appendChild(appleTouchIconLink);
+
+    // For Android
+    const manifestContent = {
+        "name": "mfer #" + mferId,
+        "short_name": "mfer #" + mferId,
+        "icons": [
+            {
+                "src": iconUrl,
+                "sizes": "192x192",
+                "type": "image/png"
+            },
+            {
+                "src": iconUrl,
+                "sizes": "512x512",
+                "type": "image/png"
+            }
+        ],
+        "start_url": window.location.href,
+        "display": "standalone",
+        "theme_color": "#000000",
+        "background_color": "#ffffff"
+    };
+
+    const manifestLink = document.createElement('link');
+    manifestLink.rel = 'manifest';
+    manifestLink.href = 'data:application/manifest+json,' + encodeURIComponent(JSON.stringify(manifestContent));
+    document.head.appendChild(manifestLink);
+
+    const themeColorMeta = document.createElement('meta');
+    themeColorMeta.name = 'theme-color';
+    themeColorMeta.content = '#000000';
+    document.head.appendChild(themeColorMeta);
+}
 </script></head>
 <body>
 <h1 id="dynamicHeader" style="text-align:center; margin: 20px 0;"></h1><h1 style="text-align:center; margin: 20px 0;"></h1>
