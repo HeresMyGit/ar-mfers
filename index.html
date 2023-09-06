@@ -1,34 +1,55 @@
 <!DOCTYPE html>
-
 <html lang="en">
-<head>
-<!-- Google tag (gtag.js) -->
-<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-DEMRCQSGLC"></script>
-<script>
-      window.dataLayer = window.dataLayer || [];
+ <head>
+  <!-- Google tag (gtag.js) -->
+  <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-DEMRCQSGLC">
+  </script>
+  <script>
+   window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
 
       gtag('config', 'G-DEMRCQSGLC');
-    </script>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>mfer avatars</title>
-<link href="demo-styles.css" rel="stylesheet"/>
-<script defer="" src="https://github.com/lightlessdays/web-ar/blob/main/focus.js"></script>
-<script src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js" type="module"></script>
-<link href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAK0lEQVQ4jWNgGAWjYBSMglEwCkbBSAcACBAAAeaR9MDwTVgZ4Q9II7CfSAb8DBhGwQgABJ5A8V7i4hkAAAAASUVORK5CYII=" rel="icon" type="image/png"/></head>
-<body><h1 style="text-align:center; margin: 20px 0;">mfer avatars</h1><div style="text-align:center; margin: 20px 0;"><a href="https://www.mferavatars.xyz" style="padding: 10px 20px; background-color: #007BFF; color: #fff; border-radius: 5px; text-decoration: none; font-weight: bold;">Mint Here</a></div>
-<div id="card">
-<div style="text-align:center; margin-bottom: 20px;">
-<label for="mferID">Enter mfer ID: </label>
-<input id="mferID" placeholder="1234" type="text"/>
-<button onclick="onSearchPressed()" style="">Search</button>
-</div>
-<div id="models-container"></div>
-</div>
-<script type="module">
-    const color_map = {
+  </script>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   mfer avatars
+  </title>
+  <link href="demo-styles.css" rel="stylesheet"/>
+  <script defer="" src="https://github.com/lightlessdays/web-ar/blob/main/focus.js">
+  </script>
+  <script src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js" type="module">
+  </script>
+  <link href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAK0lEQVQ4jWNgGAWjYBSMglEwCkbBSAcACBAAAeaR9MDwTVgZ4Q9II7CfSAb8DBhGwQgABJ5A8V7i4hkAAAAASUVORK5CYII=" rel="icon" type="image/png"/>
+ </head>
+ <body>
+  <h1 style="text-align:center; margin: 20px 0;">
+   mfer avatars
+  </h1>
+  <div style="text-align:center; margin: 20px 0;">
+   <a href="https://www.mferavatars.xyz" style="padding: 10px 20px; background-color: #007BFF; color: #fff; border-radius: 5px; text-decoration: none; font-weight: bold;">
+    Mint Here
+   </a>
+   <h4 style="text-align:center; margin: 20px 0;">
+    Open this page on your phone to view mfers in AR!
+   </h4>
+  </div>
+  <div id="card">
+   <div style="text-align:center; margin-bottom: 20px;">
+    <label for="mferID">
+     Enter mfer ID:
+    </label>
+    <input id="mferID" placeholder="1234" type="text"/>
+    <button onclick="onSearchPressed()" style="">
+     Search
+    </button>
+   </div>
+   <div id="models-container">
+   </div>
+  </div>
+  <script type="module">
+   const color_map = {
         "red": "ff7277",
         "green": "b7ff6c",
         "yellow": "5cd3ff",
@@ -97,10 +118,9 @@
     }
 
     window.onload = fetchModels;
-
-</script>
-<script>
-    function onSearchPressed() {
+  </script>
+  <script>
+   function onSearchPressed() {
         const id = document.getElementById("mferID").value;
         
         fetch('https://cybermfers.sfo3.digitaloceanspaces.com/?prefix=cybermfers/public/metadata/')
@@ -128,6 +148,6 @@
             })
             .catch(error => console.error('Error:', error));
     }
-</script>
-</body>
+  </script>
+ </body>
 </html>
