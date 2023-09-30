@@ -111,6 +111,46 @@
                 bgColor = color_map[backgroundTrait.value] || "FFFFFF";
             }
 
+            // Set favicons
+            const faviconLink = document.createElement('link');
+            faviconLink.rel = 'icon';
+            faviconLink.href = metadata.image;
+            faviconLink.type = 'image/png';
+            document.head.appendChild(faviconLink);
+
+            const iosIconLink = document.createElement('link');
+            iosIconLink.rel = 'apple-touch-icon';
+            iosIconLink.href = metadata.image;
+            document.head.appendChild(iosIconLink);
+
+            // Create and set the manifest file for Android
+            const manifestContent = {
+                "icons": [
+                    {
+                        "src": metadata.image,
+                        "sizes": "192x192",
+                        "type": "image/png"
+                    },
+                    {
+                        "src": metadata.image,
+                        "sizes": "512x512",
+                        "type": "image/png"
+                    }
+                ]
+            };
+            const manifestBlob = new Blob([JSON.stringify(manifestContent)], { type: 'application/json' });
+            const manifestUrl = URL.createObjectURL(manifestBlob);
+            const manifestLink = document.querySelector('link[rel="manifest"]');
+            if (manifestLink) {
+                manifestLink.href = manifestUrl;
+            } else {
+                const newManifestLink = document.createElement('link');
+                newManifestLink.rel = 'manifest';
+                newManifestLink.href = manifestUrl;
+                document.head.appendChild(newManifestLink);
+            }
+
+
             // Fetch and display the model
             const container = document.getElementById("models-container");
             const modelViewer = document.createElement("model-viewer");
