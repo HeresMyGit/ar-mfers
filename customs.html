@@ -116,7 +116,7 @@
                     container.appendChild(modelViewer);
 
                     const detailButton = document.createElement("button");
-                    detailButton.onclick = function() { window.location.href = `customdetails.html?id=${id}`; };
+                    detailButton.onclick = function() { window.location.href = `details.html?id=${id}&custom=true`; };
                     detailButton.textContent = `view all custom mfer #${id}`; detailButton.style.width = "calc(100% - 20px)"; detailButton.style.marginTop = "10px"; detailButton.style.padding = "10px"; detailButton.style.backgroundColor = "#007BFF"; detailButton.style.color = "#fff"; detailButton.style.border = "1px solid #ccc"; detailButton.style.cursor = "pointer"; detailButton.style.borderRadius = "5px"; detailButton.style.display = "block"; detailButton.style.marginLeft = "auto"; detailButton.style.marginRight = "auto";
                     container.appendChild(detailButton);
                 }
@@ -149,7 +149,7 @@
                      .then(response => response.json())
                      .then(metadata => {
                          if (metadata.name !== 'custom mfer') {
-                             window.location.href = `customdetails.html?id=${id}`;
+                             window.location.href = `details.html?id=${id}&custom=true`;
                          } else {
                            let modalResponse = confirm('That avatar is not minted. Do you want to mint it?');
                            if (modalResponse) {
