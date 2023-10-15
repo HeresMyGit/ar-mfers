@@ -143,10 +143,7 @@
                 if (fileFound) {
                     window.location.href = `details.html?id=${id}`;
                 } else {
-                    let modalResponse = confirm('That avatar is not minted. Do you want to mint it?');
-                    if (modalResponse) {
-                        window.location.href = 'https://www.mferavatars.xyz';
-                    }
+                    window.location.href = `details.html?id=${id}&needsMint=true`;
                 }
             })
             .catch(error => console.error('Error:', error));

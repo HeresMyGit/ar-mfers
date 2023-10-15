@@ -39,6 +39,9 @@
         .model-container {
             width: 100%;
         }
+        #mainHeader {
+            text-align: center;
+        }
         @media (max-width: 768px) {
             #card {
                 padding-left: 80px;
@@ -53,10 +56,12 @@
         window.addEventListener('load', function() {
             initializeGTag();
             setDynamicTitleAndHeader();
+            const urlParams = new URLSearchParams(window.location.search);
+            const needsMint = urlParams.has('needsMint') ? urlParams.get('needsMint') === 'true' : false;  // Default to false
             fetchModelDetails([
               { name: 'idle', fileTypes: ['GLB', 'USDZ'] },
               // ... other extra items ...
-          ]);
+          ], needsMint);
         });
 
         function initializeGTag() {
@@ -67,9 +72,19 @@
         }
 
         function setDynamicTitleAndHeader() {
-            const urlParams = new URLSearchParams(window.location.search);
+              const urlParams = new URLSearchParams(window.location.search);
+              const isCustom = urlParams.get('custom') === 'true';
+
+              const mainHeaderText = isCustom ? 'mfer avatars: customs' : 'mfer avatars';
+              const mainHeaderURL = isCustom ? 'https://ar.mferavatars.xyz/customs' : 'https://ar.mferavatars.xyz';
+
+              const mainHeaderElement = document.getElementById('mainHeader');
+              if (mainHeaderElement) {
+                  mainHeaderElement.href = mainHeaderURL;
+                  mainHeaderElement.querySelector('h1').textContent = mainHeaderText;
+              }
+
             const mferId = urlParams.get('id');
-            const isCustom = urlParams.get('custom') === 'true';
 
             if (mferId) {
                 const titleText = isCustom ? 'custom mfer #' : 'mfer #';
@@ -92,14 +107,18 @@
             "graveyard": "7c7c7c"
         };
 
-        async function fetchModelDetails(extraItems) {
+        async function fetchModelDetails(extraItems, needsMint = false) {
             const params = new URLSearchParams(window.location.search);
             const id = params.get('id');
             const isCustom = params.get('custom') === 'true';
 
-            const baseUrl = isCustom ?
-                'https://cybermfers.sfo3.digitaloceanspaces.com/cybermfers/customs/public/' :
-                'https://cybermfers.sfo3.digitaloceanspaces.com/cybermfers/public/';
+            const urlPrefix = isCustom ?
+                'https://cybermfers.sfo3.digitaloceanspaces.com/cybermfers/customs/' :
+                'https://cybermfers.sfo3.digitaloceanspaces.com/cybermfers/';
+
+            const publicOrPrivate = needsMint ? "private" : "public";
+            const baseUrl = `${urlPrefix}${publicOrPrivate}/`;
+
 
             // Fetch metadata for the specific model
             const response = await fetch(`${baseUrl}metadata/${id}.json`);
@@ -177,15 +196,41 @@
 
             // Create and append download buttons
             const fileTypes = ['PNG', 'VRM', 'FBX', 'USDZ', 'GLB'];
-            const urls = [metadata.image, metadata.vrm_url, metadata.fbx_url, metadata.usdz_url, metadata.animation_url];
+            let urls = [metadata.image, metadata.vrm_url, metadata.fbx_url, metadata.usdz_url, metadata.animation_url];
+
+            if (needsMint) {
+                urls = urls.map(url => url.replace('/public/', '/private/'));
+            }
 
             fileTypes.forEach((type, index) => {
                 const button = document.createElement('button');
                 button.id = type.toLowerCase() + '-btn';
-                button.textContent = type;
-                button.addEventListener("click", () => downloadFile(urls[index], type));
-                buttonsDiv.appendChild(button);  // Append buttons to the new div
+
+                // If needsMint is true, append a 🔒 to 'VRM' and 'FBX'
+                const label = (needsMint && (type === 'VRM' || type === 'FBX')) ? `${type} 🔒` : type;
+                button.textContent = label;
+
+                if (needsMint && (type === 'FBX' || type === 'VRM')) {
+                    button.disabled = true;
+                    button.style.opacity = 0.5;
+                } else {
+                    button.addEventListener("click", () => downloadFile(urls[index], type));
+                }
+
+                buttonsDiv.appendChild(button);
             });
+
+            // Add Mint text and button if needed
+            if (needsMint) {
+                const mintText = document.createElement('p');
+                mintText.textContent = "Mint this avatar to unlock all file types:";
+                buttonsDiv.appendChild(mintText);
+
+                const mintButton = document.createElement('button');
+                mintButton.textContent = "Mint";
+                mintButton.addEventListener("click", () => window.open("https://mferavatars.xyz"));
+                buttonsDiv.appendChild(mintButton);
+            }
 
             container.appendChild(buttonsDiv);  // Append the new div to models-container
 
@@ -268,6 +313,15 @@
     </script>
 </head>
 <body>
+  <!-- Add placeholder for the header at the top -->
+  <a id="mainHeader" href="" style="text-decoration: none; color: inherit;">
+        <h1></h1>
+    </a>
+    <h1 id="dynamicHeader"></h1>
+    <div id="card">
+        <div id="models-container"></div>
+    </div>
+    <div class="metadata"></div>
     <h1 id="dynamicHeader"></h1>
     <div id="card">
         <div id="models-container"></div>
