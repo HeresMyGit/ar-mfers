@@ -60,6 +60,7 @@
             const needsMint = urlParams.has('needsMint') ? urlParams.get('needsMint') === 'true' : false;  // Default to false
             fetchModelDetails([
               { name: 'idle', fileTypes: ['GLB', 'USDZ'] },
+              { name: 'christmas', fileTypes: ['GLB', 'USDZ', 'VRM', 'FBX'] },
               // ... other extra items ...
           ], needsMint);
         });
