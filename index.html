@@ -41,6 +41,9 @@
     Open this page on your phone to view mfers in AR!
    </h4>
   </div>
+  <div id="new-models-container" style="display: flex; justify-content: center; align-items: baseline;">
+    <!-- The new 3D models will go here -->
+  </div>
   <div id="card">
    <div style="text-align:center; margin-bottom: 20px;">
     <label for="mferID">
@@ -141,6 +144,36 @@
     }
 
     window.onload = fetchModels;
+
+    // Delete this after christmas
+
+    // Custom examples
+    document.addEventListener("DOMContentLoaded", function() {
+      // Define new model ids and their background colors
+      const newModels = [
+        { id: "santa", color: "red" }
+      ];
+
+      const newModelsContainer = document.getElementById("new-models-container");
+
+      // Create model-viewer elements for each new model
+      newModels.forEach(model => {
+        const modelViewer = document.createElement("model-viewer");
+        modelViewer.setAttribute("src", `https://cybermfers.sfo3.digitaloceanspaces.com/cybermfers/customs/public/assets/extras/christmas/glb/${model.id}.glb`);
+        modelViewer.setAttribute("ios-src", `https://cybermfers.sfo3.digitaloceanspaces.com/cybermfers/customs/public/assets/extras/christmas/usdz/${model.id}.usdz`);
+        modelViewer.setAttribute("alt", `${model.id}`);
+        modelViewer.setAttribute("ar-status", "not-presenting");
+        modelViewer.setAttribute("shadow-intensity", "1");
+        modelViewer.setAttribute("camera-controls", "");
+        modelViewer.setAttribute("ar", "");
+        modelViewer.setAttribute("autoplay", "");
+        modelViewer.setAttribute("loop", "");
+
+        const bgColor = color_map[model.color] || "FFFFFF";
+        modelViewer.style.backgroundColor = `#${bgColor}`;
+        newModelsContainer.appendChild(modelViewer);
+      });
+    });
   </script>
   <script>
    function onSearchPressed() {

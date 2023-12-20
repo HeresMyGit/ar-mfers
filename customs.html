@@ -86,9 +86,12 @@
                 const metadataResponse = await fetch(metadataUrl);
                 const metadata = await metadataResponse.json();
 
-                const glb = metadata.animation_url;
-                const usdz = metadata.usdz_url;
                 const id = basename.split('/').pop();
+
+                // const glb = metadata.animation_url;
+                // const usdz = metadata.usdz_url;
+                const glb = `https://cybermfers.sfo3.digitaloceanspaces.com/cybermfers/customs/public/assets/extras/christmas/glb/${id}.glb`;
+                const usdz = `https://cybermfers.sfo3.digitaloceanspaces.com/cybermfers/customs/public/assets/extras/christmas/usdz/${id}.usdz`;
 
                 const container = document.getElementById("models-container");
 
