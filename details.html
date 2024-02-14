@@ -62,6 +62,7 @@
               { name: 'idle', fileTypes: ['GLB', 'USDZ'] },
               { name: 'christmas', fileTypes: ['GLB', 'USDZ', 'VRM', 'FBX'] },
               { name: 'winter', fileTypes: ['GLB', 'USDZ', 'VRM', 'FBX'] },
+              { name: 'drone', fileTypes: ['GLB', 'USDZ', 'FBX']}
               // ... other extra items ...
           ], needsMint);
         });
@@ -250,7 +251,7 @@
                     modelContainer.classList.add('model-container');
 
                     const modelViewer = document.createElement("model-viewer");
-                    modelViewer.style.backgroundColor = `#${bgColor}`;
+                    modelViewer.style.backgroundColor = `#${bgColor}`; // Ensure bgColor is defined or set a default value
                     modelViewer.setAttribute("src", `${baseUrl}assets/extras/${name}/glb/${itemId}.glb`);
                     modelViewer.setAttribute("ios-src", `${baseUrl}assets/extras/${name}/usdz/${itemId}.usdz`);
                     modelViewer.setAttribute("alt", `mfer #${itemId}`);
