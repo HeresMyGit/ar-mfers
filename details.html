@@ -64,7 +64,8 @@
               { name: 'winter', fileTypes: ['GLB', 'USDZ', 'VRM', 'FBX'] },
               { name: 'drone', fileTypes: ['GLB', 'USDZ', 'FBX']},
               { name: 'chrome', fileTypes: ['GLB', 'USDZ']},
-              { name: 'chromefull', fileTypes: ['GLB', 'USDZ']}
+              { name: 'chromefull', fileTypes: ['GLB', 'USDZ']},
+              { name: 'lowres', fileTypes: ['GLB', 'VRM']}
               // ... other extra items ...
           ], needsMint);
         });
@@ -79,9 +80,15 @@
         function setDynamicTitleAndHeader() {
               const urlParams = new URLSearchParams(window.location.search);
               const isCustom = urlParams.get('custom') === 'true';
+              const isBased = urlParams.get('based') === 'true';
 
-              const mainHeaderText = isCustom ? 'mfer avatars: customs' : 'mfer avatars';
-              const mainHeaderURL = isCustom ? 'https://ar.mferavatars.xyz/customs' : 'https://ar.mferavatars.xyz';
+              let mainHeaderText = isCustom ? 'mfer avatars: customs' : 'mfer avatars';
+              let mainHeaderURL = isCustom ? 'https://ar.mferavatars.xyz/customs' : 'https://ar.mferavatars.xyz';
+
+              if (isBased) {
+                mainHeaderText = 'based mfer avatars'
+                mainHeaderURL = 'https://ar.mferavatars.xyz/based'
+              }
 
               const mainHeaderElement = document.getElementById('mainHeader');
               if (mainHeaderElement) {
@@ -92,7 +99,10 @@
             const mferId = urlParams.get('id');
 
             if (mferId) {
-                const titleText = isCustom ? 'custom mfer #' : 'mfer #';
+                let titleText = isCustom ? 'custom mfer #' : 'mfer #';
+                if (isBased) {
+                    titleText = 'based mfer #'
+                }
                 document.title = titleText + mferId;
                 const headerElement = document.getElementById('dynamicHeader');
                 if (headerElement) {
@@ -116,17 +126,26 @@
             const params = new URLSearchParams(window.location.search);
             const id = params.get('id');
             const isCustom = params.get('custom') === 'true';
+            const isBased = params.get('based') === 'true';
 
-            const urlPrefix = isCustom ?
+            let urlPrefix = isCustom ?
                 'https://cybermfers.sfo3.digitaloceanspaces.com/cybermfers/customs/' :
                 'https://cybermfers.sfo3.digitaloceanspaces.com/cybermfers/';
+
+            if (isBased) {
+                urlPrefix = 'https://cybermfers.sfo3.digitaloceanspaces.com/cybermfers/based/'
+            }
 
             const publicOrPrivate = needsMint ? "private" : "public";
             const baseUrl = `${urlPrefix}${publicOrPrivate}/`;
 
 
             // Fetch metadata for the specific model
-            const response = await fetch(`${baseUrl}metadata/${id}.json`);
+            let metadataurl = `${baseUrl}metadata/${id}.json`
+            if (isBased) {
+                metadataurl = `${baseUrl}metadata/${id}`
+            }
+            const response = await fetch(metadataurl);
             const metadata = await response.json();
 
             let bgColor = "FFFFFF";
